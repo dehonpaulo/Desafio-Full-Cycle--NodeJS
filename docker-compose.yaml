@@ -1,0 +1,53 @@
+version: '3'
+
+
+services:
+
+  nginx:
+    build:
+      context: nginx
+    container_name: nginx
+    ports:
+      - "8080:80"
+    tty: true
+    networks:
+      - app_network
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: app
+    container_name: app
+    tty: true
+    networks:
+      - app_network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    container_name: db
+    command:
+      - "--innodb-use-native-aio=0"
+      - "--default-authentication-plugin=mysql_native_password"
+    restart: always
+    tty: true
+    volumes:
+      - type: bind
+        source: ./script.sql
+        target: /docker-entrypoint-initdb.d/script.sql
+    environment:
+      - MYSQL_DATABASE=appdb
+      - MYSQL_PASSWORD= root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_USER=root
+    expose:
+      - 3306
+    networks:
+      - app_network
+
+
+networks:
+  app_network:
+    driver: bridge
