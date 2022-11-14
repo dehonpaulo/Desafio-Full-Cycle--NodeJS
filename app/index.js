@@ -22,6 +22,10 @@ con.connect((err) => {
 })
 
 
+app.get('/favicon.ico', function(req, res) { 
+    res.sendStatus(204); 
+});
+
 app.get('/:name', (request, response) => {
     
     con.query(

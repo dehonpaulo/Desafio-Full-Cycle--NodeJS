@@ -14,5 +14,3 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
     && rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 EXPOSE 3000
-
-CMD [ "dockerize", "-wait", "tcp://db:3306", "-timeout", "20s", "node", "index.js"]
